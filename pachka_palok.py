@@ -25,6 +25,6 @@ def importer():
 
 @app.route("/dash", methods=['GET'])
 def dash():
-    return render_template("dashboard.html", j=prepare.get_db_entry(request.remote_addr))
+    return render_template("dashboard.html", j=prepare.get_db_entry(request.remote_addr), str=str)
 
 app.run(host="0.0.0.0")

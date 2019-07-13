@@ -8,7 +8,7 @@
     options = {chart: {
     type: 'donut'
   },
-  series: [ {{ j }} ],
+  series: [ {% for i in j[:-1] %} {{str(i)+","}}{%endfor%}{{j[-1]}}],
   labels: ['Физика',
 'Химия',
 'Математика',

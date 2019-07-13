@@ -12,5 +12,5 @@ def get_db_entry(uid):
     cur = conn.cursor()
     p = cur.execute("select osn_filt from portraits where uid='{}'".format(uid))
     p = p.fetchall()
-    print(p)
-    return 
+    p = list(eval(p[0][0]).values())
+    return p
