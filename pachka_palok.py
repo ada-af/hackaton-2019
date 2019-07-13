@@ -27,4 +27,8 @@ def importer():
 def dash():
     return render_template("dashboard.html", j=prepare.get_db_entry(request.remote_addr), str=str)
 
+@app.route("/")
+def index():
+    return render_template('index.html')
+
 app.run(host="0.0.0.0")

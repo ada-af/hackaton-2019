@@ -3,7 +3,10 @@
 <script src="{{url_for('static', filename='js/apexcharts.min.js') }}"></script>
 {% endblock imports %}
 {% block content %}
-<div id='chart' style='max-width: 30vw; max-height: 30vh;'></div>
+<div class="container">
+  <div class="row">
+<div id='col-md-6 chart' ></div> 
+</div></div>
 <script>
     options = {chart: {
     type: 'donut'
