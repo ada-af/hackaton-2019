@@ -1,25 +1,43 @@
 import tensorflow as tf
-from module import enumerator
+from tensorflow import keras
+import enumerator
+import numpy
 
-p = open('conn/ds_end.txt').read().split("\n")
+p = open('conn/ds_end.txt', 'rb').read().split(b"\n")
 train = []
+res = []
 for i in p:
-    train_in, train_out = enumerator.encode(i.split("~~~")[0]), i.split("~~~")[1]
+    try:
+        train.append(enumerator.encode(i.split(b"~~~")[0]))
+        res.append(int(i.split(b"~~~")[1].strip().decode()))
+    except Exception:
+        pass
 
-model = tf.keras.models.Sequential([
-  tf.keras.layers.Flatten(input_shape=(30)),
-  tf.keras.layers.Dense(128, activation='relu'),
-  tf.keras.layers.Dropout(0.2),
-  tf.keras.layers.Dense(1, activation='softmax')
-])
+part_x = train[:10000:2]
+part_y = res[:10000:2]
 
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
+vocab_size = 55000
+
+model = keras.Sequential()
+model.add(keras.layers.Embedding(vocab_size, 10, input_shape=(None, )))
+model.add(keras.layers.GlobalAveragePooling1D())
+model.add(keras.layers.Dense(42, activation=tf.nn.tanh))
+model.add(keras.layers.Dense(1, activation=tf.nn.relu))
+
+model.summary()
+
+model.compile(optimizer=tf.train.AdamOptimizer(),
+              loss='poisson',
               metrics=['accuracy'])
 
-model.fit(train_in, train_out, epochs=5)
+history = model.fit([part_x],
+part_y,
+                    epochs=20,
+                    batch_size=1000,
+                    validation_data=([train[:10000]], res[:10000]))
 
-saver = tf.train.Saver(max_to_keep=1) 
-with tf.Session() as sess:
-    savePath = saver.save(sess, 'model.ckpt')
+inp = input()
 
+p = model.predict([enumerator.encode(inp)])
+print(p[:1])
+model.save("network.net")
