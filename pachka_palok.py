@@ -7,7 +7,6 @@ from flask import Flask
 from flask import render_template, request, redirect
 from multiprocessing import Process
 from module import prepare, simp_filt
-from nn_classifier import 
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py', silent=True)
