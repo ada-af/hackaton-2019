@@ -7,6 +7,7 @@ from flask import Flask
 from flask import render_template, request, redirect
 from multiprocessing import Process
 from module import prepare, simp_filt
+from nn_classifier import 
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py', silent=True)
@@ -26,5 +27,9 @@ def importer():
 @app.route("/dash", methods=['GET'])
 def dash():
     return render_template("dashboard.html", j=prepare.get_db_entry(request.remote_addr), str=str)
+
+@app.route("/")
+def index():
+    return render_template('index.html')
 
 app.run(host="0.0.0.0")
