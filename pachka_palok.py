@@ -16,9 +16,9 @@ def index():
         return render_template('import.html')
     else:
         file = request.files['file']
-        temp_file = secure_filename(temp_file)
+        temp_file = secure_filename(file.filename)
         file.save('tmp/', temp_file)
-        p = Process(target=simp_filt, args=(prepare.get_json(open('tmp/'+temp_file)))
+        p = Process(target=simp_filt, args=(prepare.get_json(open('tmp/'+temp_file)),))
         p.start()
         p.join()
 
