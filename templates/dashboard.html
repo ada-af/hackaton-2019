@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block imports %}
+<script src="{{url_for('static', filename='js/apexcharts.min.js') }}"></script>
+{% endblock imports %}
+{% block content %}
+<div id='chart' style='max-width: 30vw; max-height: 30vh;'></div>
+<script>
+    options = {chart: {
+    type: 'donut'
+  },
+  series: [ {{ j }} ],
+  labels: ['Физика',
+'Химия',
+'Математика',
+'Биология',
+'Русский язык',
+'История',
+'Психология',
+'Информатика']
+}
+    var chart = new ApexCharts(document.getElementById('chart'), options);
+    chart.render()
+</script>
+{% endblock content %}
