@@ -5,23 +5,42 @@
 {% block content %}
 <div class="container">
   <div class="row">
-<div id='col-md-6 chart' ></div> 
+<div class='col-md-6' >
+  <div id='chart'></div>
+</div> <div class='col-md-6' >
+    <div id='chart-1'></div>
+  </div> 
 </div></div>
 <script>
-    options = {chart: {
-    type: 'donut'
+options_perc = {
+      chart: {
+        type: 'donut'
   },
-  series: [ {% for i in j[:-1] %} {{str(i)+","}}{%endfor%}{{j[-1]}}],
-  labels: ['Физика',
-'Химия',
-'Математика',
-'Биология',
-'Русский язык',
-'История',
-'Психология',
-'Информатика']
-}
-    var chart = new ApexCharts(document.getElementById('chart'), options);
+  series: [ {% for i in j[:-1] %} {{str(i[0])+","}}{%endfor%}{{j[-1][0]}}],
+  labels: ['Физика', 'Химия', 'Математика', 'Биология', 'Русский язык', 'История', 'Психология', 'Информатика']}
+
+var options = {
+          chart: {
+              type: 'bar',
+          },
+          plotOptions: {
+              bar: {
+                  horizontal: true,
+              }
+          },
+          dataLabels: {
+              enabled: false
+          },
+          series: [{
+              data: [{% for i in j[:-1] %} {{str(i[1])+","}} {%endfor%} {{j[-1][1]}}]
+          }],
+          xaxis: {
+              categories: ['Физика', 'Химия', 'Математика', 'Биология', 'Русский язык', 'История', 'Психология', 'Информатика'],
+          }
+      }
+    var chart = new ApexCharts(document.getElementById('chart'), options_perc);
     chart.render()
+    var chart_1 = new ApexCharts(document.getElementById('chart-1'), options);
+    chart_1.render()
 </script>
 {% endblock content %}
