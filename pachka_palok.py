@@ -7,6 +7,7 @@ from flask import Flask
 from flask import render_template, request, redirect
 from multiprocessing import Process
 from module import prepare, simp_filt
+import os
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py', silent=True)
@@ -21,6 +22,7 @@ def importer():
         file.save('tmp/'+temp_file)
         target = simp_filt.parsing(prepare.get_json('tmp/'+temp_file))
         simp_filt.flush_to_db(request.remote_addr, json.dumps(target))
+        os.remove("tmp/"+temp_file)
         return redirect('/dash')
 
 @app.route("/dash", methods=['GET'])
