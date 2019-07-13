@@ -1,5 +1,6 @@
 import json
-
+import datetime
+import sqlite3
 
 def parsing(read_file):
     _slovar = {
@@ -28,3 +29,9 @@ def parsing(read_file):
             if len(jo & set(_slovar[j])) != 0:
                     stats[j] += 1
     return stats
+
+def flush_to_db(uid, osn_filt):
+    conn = sqlite3.connect("sqlite.db")
+    cur = conn.cursor()
+    cur.execute("insert into portraits values ('{}', '{}', '', '{}'".format(uid, osn_filt, datetime.datetime.now()))
+    conn.commit()

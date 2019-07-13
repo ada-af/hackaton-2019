@@ -1,6 +1,7 @@
 import jinja2
 from werkzeug.utils import secure_filename
 import tempfile
+import json
 from flask import Flask
 from flask import render_template, request, redirect
 from multiprocessing import Process
@@ -16,10 +17,9 @@ def index():
     else:
         file = request.files['file']
         temp_file = secure_filename(file.filename)
-        file.save('tmp/', temp_file)
-        p = Process(target=simp_filt.jopa, args=(prepare.get_json(open('tmp/'+temp_file)),))
-        p.start()
-        p.join()
+        file.save('tmp/'+temp_file)
+        target = simp_filt.parsing(prepare.get_json('tmp/'+temp_file))
+        simp_filt.flush_to_db(request.cookies.get('id'), json.dumps(target))
 
 
 app.run(host="0.0.0.0")
