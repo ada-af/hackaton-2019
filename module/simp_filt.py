@@ -5,7 +5,7 @@ def parsing(read_file):
 			for j in _slovar.keys():
 	            jo  =  set(data[i].split(' '))
 				if len(jo & set(_slovar[j])) != 0:
-					
+					stats[j] += 1
 
 
 
