@@ -6,13 +6,17 @@ import random
 from flask import Flask
 from flask import render_template, request, redirect, make_response
 from multiprocessing import Process
-from module import prepare, simp_filt
+from module import prepare, simp_filt, nn_class
 from hashlib import md5
 import sqlite3
 import os
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py', silent=True)
+
+def dhfskjfgs(temp_file, remote_addr):
+    adv_tgt = nn_class.evaluate_topics(prepare.get_json('tmp/'+temp_file))
+    prepare.update_adv_filt(remote_addr, adv_tgt)
 
 @app.route("/import", methods=["GET", "POST"])
 def importer():
@@ -25,6 +29,9 @@ def importer():
         target = simp_filt.parsing(prepare.get_json('tmp/'+temp_file))
         simp_filt.flush_to_db(request.remote_addr, json.dumps(target))
         os.remove("tmp/"+temp_file)
+        p = Process(target=dhfskjfgs, args=(temp_file, request.remote_addr,))
+        p.start()
+        p.join()
         return redirect('/dash')
 
 @app.route("/dash", methods=['GET'])
