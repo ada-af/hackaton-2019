@@ -34,7 +34,8 @@ def importer():
 
 @app.route("/dash", methods=['GET'])
 def dash():
-    return render_template("dashboard.html", j=prepare.get_db_entry(request.remote_addr), str=str)
+    p = prepare.get_adv_filt(request.remote_addr)
+    return render_template("dashboard.html", j=prepare.get_db_entry(request.remote_addr), str=str, adv=p, sum=sum, round=round)
 
 @app.route("/sign/in", methods=['POST'])
 def sign_in():
@@ -55,17 +56,19 @@ def sign_in():
 def sign_up():        
     if request.method.lower() == 'post':
         user = request.form['user']
-        passwd = md5(request.form['passwd']).hexdigest()
+        # passwd = md5(request.form['passwd'].encode()).hexdigest()
+        passwd = "123456"
         conn = sqlite3.connect('sqlite.db')
         cur = conn.cursor()
-        user_sec = md5(str(random.randint(0, 100000))+passwd).hexdigest()
+        user_sec = 'yyyyyy'
+        # user_sec = md5(bytes(random.randint(0, 100000))+passwd).hexdigest()
         try:
             cur.execute("insert into users values('{}','{}','{}'".format(user, passwd,
             user_sec))
         except Exception:
-            return redirect('/')
+            return redirect('/import')
         else:
-            resp = make_response(redirect('/dash'))
+            resp = make_response(redirect('/import'))
             resp.set_cookie('user_sec', user_sec)
             return resp
         

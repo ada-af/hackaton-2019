@@ -10,7 +10,11 @@
 </div> <div class='col-md-6' >
     <div id='chart-1'></div>
   </div> 
-</div></div>
+</div>Программирование:
+{% for i in adv.keys() %}
+<br>{% if adv[i] != 0 %} {{i}} -> {{round((adv[i] / sum(adv.values()) * 100), 2) }}%
+  {% endif %}
+  {% endfor %} </div>
 <script>
 options_perc = {
       chart: {

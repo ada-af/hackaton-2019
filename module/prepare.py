@@ -13,6 +13,13 @@ def update_adv_filt(uid, data):
     cur.execute('''update portraits set adv_filt='{}' where uid='{}\''''.format(data, uid))
     conn.commit()
 
+def get_adv_filt(uid):
+    conn = sqlite3.connect("sqlite.db")
+    cur = conn.cursor()
+    p = cur.execute('select adv_filt from portraits where uid="{}"'.format(uid)).fetchall()
+    p = eval(p[0][0])
+    return p
+
 def get_db_entry(uid):
     conn = sqlite3.connect("sqlite.db")
     cur = conn.cursor()

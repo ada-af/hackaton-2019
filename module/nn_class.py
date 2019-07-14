@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 import math
 import json
+import random
 from module import enumerator
 
 def evaluate_topics(queries):
@@ -26,7 +27,7 @@ def evaluate_topics(queries):
     'xml': 0,
     'other': 0}
 
-    model = keras.models.load_model('network.net')
+    model = keras.models.load_model('network copy 2.net')
     model.compile(optimizer=tf.train.AdamOptimizer(),
               loss='poisson',
               metrics=['accuracy'])
@@ -39,9 +40,9 @@ def evaluate_topics(queries):
             res.append(int(i.split(b"~~~")[1].strip().decode()))
         except Exception:
             pass
-    model.evaluate([train[200:3000]], res[200:3000])
+    model.evaluate([train[200:5000]], res[200:5000])
     for i in json.load(queries):
-        predicted_topic = math.floor(max(model.predict(enumerator.encode(i['title']))*10))
+        predicted_topic = int(model.predict(enumerator.encode(i['title']))[0]+(3/random.randint(1, 30)))
         if 0 == predicted_topic:
             j = 'c++'
         elif 1 == predicted_topic:
