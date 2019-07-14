@@ -28,10 +28,8 @@ def importer():
         file.save('tmp/'+temp_file)
         target = simp_filt.parsing(prepare.get_json('tmp/'+temp_file))
         simp_filt.flush_to_db(request.remote_addr, json.dumps(target))
+        dhfskjfgs(temp_file, request.remote_addr)
         os.remove("tmp/"+temp_file)
-        p = Process(target=dhfskjfgs, args=(temp_file, request.remote_addr,))
-        p.start()
-        p.join()
         return redirect('/dash')
 
 @app.route("/dash", methods=['GET'])

@@ -27,8 +27,21 @@ def evaluate_topics(queries):
     'other': 0}
 
     model = keras.models.load_model('network.net')
-    for i in json.loqueries:
-        predicted_topic = math.floor(max(model.predict(enumerator.encode(i))*10))
+    model.compile(optimizer=tf.train.AdamOptimizer(),
+              loss='poisson',
+              metrics=['accuracy'])
+    p = open('conn/ds_end.txt', 'rb').read().split(b"\n")
+    train = []
+    res = []
+    for i in p:
+        try:
+            train.append(enumerator.encode(i.split(b"~~~")[0]))
+            res.append(int(i.split(b"~~~")[1].strip().decode()))
+        except Exception:
+            pass
+    model.evaluate([train[200:3000]], res[200:3000])
+    for i in json.load(queries):
+        predicted_topic = math.floor(max(model.predict(enumerator.encode(i['title']))*10))
         if 0 == predicted_topic:
             j = 'c++'
         elif 1 == predicted_topic:
@@ -59,5 +72,5 @@ def evaluate_topics(queries):
         _res_dict[j] += 1
 
 
-    return json.dumps(predicted_topic)
+    return json.dumps(_res_dict)
             
